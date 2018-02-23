@@ -5,6 +5,7 @@ import BuildControls from '../../components/Burger/BuildControls';
 import Modal from '../../components/UI/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary';
 import Spinner from '../../components/UI/Spinner';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import axios from '../../axios-order';
 
@@ -41,7 +42,7 @@ class BurgerBuilder extends Component {
       .map(igKey => ingredients[igKey])
       .reduce((sum, el) => {
         return sum + el;
-      }, 0); 
+      }, 0);
     this.setState({ purchasable: sum > 0 });
   }
 
@@ -149,4 +150,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
