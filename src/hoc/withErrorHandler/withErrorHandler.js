@@ -1,14 +1,40 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Modal from '../../components/UI/Modal';
 
-const withErrorHandler = (WrappedComponent) => {
-  return (props) => {
-    return (
-      <React.Fragment>
-        <Modal show>Error</Modal>
-        <WrappedComponent {...props} />
-      </React.Fragment>
-    );
+const withErrorHandler = (WrappedComponent, axios) => {
+  return class extends Component {
+    state = {
+      error: null
+    }
+
+    componentDidMount() {
+      axios.interceptors.response.use(req => {
+        this.setState({error: null});
+        return req;
+      });
+
+      axios.interceptors.response.use(res => res, error => {
+        this.setState({ error: error });
+      });
+    }
+
+    errorConfirmHandler = () => {
+      this.setState({ error: null });
+    }
+
+    render() {
+      return (
+        <React.Fragment>
+          <Modal 
+            show={this.state.error}
+            modalClosed={this.errorConfirmHandler}
+          >
+            {this.state.error ? this.state.error.message : null}
+          </Modal>
+          <WrappedComponent {...this.props} />
+        </React.Fragment>
+      );
+    }
   }
 };
 

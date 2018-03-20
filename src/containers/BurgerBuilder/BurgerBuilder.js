@@ -42,7 +42,7 @@ class BurgerBuilder extends Component {
       .map(igKey => ingredients[igKey])
       .reduce((sum, el) => {
         return sum + el;
-      }, 0); 
+      }, 0);
     this.setState({ purchasable: sum > 0 });
   }
 
@@ -150,5 +150,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default withErrorHandler(BurgerBuilder);
-// export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
