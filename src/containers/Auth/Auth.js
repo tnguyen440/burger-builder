@@ -71,8 +71,8 @@ class Auth extends Component {
 
     return isValid;
   }
-
-  inputChangeHandler = (event, controlName) => {
+  
+  inputChangedHandler = (event, controlName) => {
     const updatedControls = {
       ...this.state.controls,
       [controlName]: {
@@ -82,6 +82,8 @@ class Auth extends Component {
         touched: true,
       }
     }
+
+    this.setState({ controls: updatedControls });
   }
 
   render() {
