@@ -57,22 +57,7 @@ const reducer = (state = initialState, action) => {
     case actionTypes.ADD_INGREDIENT: return addIngredients(state, action);
     case actionTypes.REMOVE_INGREDIENT: return removeIngredients(state, action);
     case actionTypes.SET_INGREDIENTS: return setIngredients(state, action);
-      // return {
-      //   ...state,
-      //   ingredients: {
-      //     salad: action.ingredients.salad,
-      //     bacon: action.ingredients.bacon,
-      //     cheese: action.ingredients.cheese,
-      //     meat: action.ingredients.meat
-      //   },
-      //   error: false,
-      //   totalPrice: 4,
-      // }
     case actionTypes.FETCH_INGREDIENTS_FAILED: return updateObject(state, {error: true, });
-      // return {
-      //   ...state,
-      //   error: true,
-      // }  
     default: return state;
   }
 }

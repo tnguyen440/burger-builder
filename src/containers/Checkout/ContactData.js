@@ -50,7 +50,7 @@ class ContactData extends Component {
         validation: {
           required: true,
           minLength: 5,
-          maxLength: 5,
+          maxLength: 5
         },
         valid: false,
         touched: false,
@@ -89,25 +89,27 @@ class ContactData extends Component {
         elementConfig: {
           options: [
             { value: 'fastest', displayValue: 'Fastest' },
-            { value: 'cheapest', displayValue: 'Cheapest' },
+            { value: 'cheapest', displayValue: 'Cheapest' }
           ]
         },
         value: 'fastest',
         validation: {},
         valid: true
-      },
+      }
     },
     // loading: false,
     formIsValid: false
-  }
+  };
 
-  orderHandler = (e) => {
+  orderHandler = e => {
     e.preventDefault();
 
     const formData = {};
 
     for (let formElementIndentifier in this.state.orderForm) {
-      formData[formElementIndentifier] = this.state.orderForm[formElementIndentifier].value;
+      formData[formElementIndentifier] = this.state.orderForm[
+        formElementIndentifier
+      ].value;
     }
 
     // console.log(formData)
@@ -132,11 +134,10 @@ class ContactData extends Component {
     //     // console.log(err);
     //     this.setState({ loading: false });
     //   });
-  }
+  };
 
   checkValidity(value, rules) {
     let isValid = true;
-
     if (!rules) {
       return true;
     }
@@ -151,6 +152,16 @@ class ContactData extends Component {
 
     if (rules.maxLength) {
       isValid = value.length <= rules.maxLength && isValid;
+    }
+
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+    }
+
+    if (rules.isNumeric) {
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid;
     }
 
     return isValid;
@@ -171,7 +182,10 @@ class ContactData extends Component {
     // console.log('updatedOrderFormElement', updatedOrderFormElement);
 
     updatedOrderFormElement.value = event.target.value;
-    updatedOrderFormElement.valid = this.checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
+    updatedOrderFormElement.valid = this.checkValidity(
+      updatedOrderFormElement.value,
+      updatedOrderFormElement.validation
+    );
     updatedOrderFormElement.touched = true;
     // console.log(updatedOrderFormElement);
     updatedOrderForm[inputIdentifier] = updatedOrderFormElement;
@@ -182,9 +196,9 @@ class ContactData extends Component {
       formIsValid = updatedOrderForm[inputIdentifier].valid && formIsValid;
     }
 
-    console.log(formIsValid);
-    this.setState({ orderForm:  updatedOrderForm, formIsValid: formIsValid });
-  }
+    // console.log(formIsValid);
+    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
+  };
 
   render() {
     const formElementArray = [];
@@ -192,32 +206,29 @@ class ContactData extends Component {
       formElementArray.push({
         id: key,
         config: this.state.orderForm[key]
-      })
+      });
     }
     // console.log(formElementArray);
     let form = (
       <form onSubmit={this.orderHandler}>
-        {formElementArray.map(formElement => 
+        {formElementArray.map(formElement => (
           <Input
             key={formElement.id}
-            elementType={formElement.config.elementType} 
-            elementConfig={formElement.config.elementConfig} 
+            elementType={formElement.config.elementType}
+            elementConfig={formElement.config.elementConfig}
             value={formElement.config.value}
             invalid={!formElement.config.valid}
             shouldValidate={formElement.config.validation}
             touched={formElement.config.touched}
             errorMessage={formElement.config.errorMessage}
-            changed={(e) => this.inputChangedHandler(e, formElement.id)}
+            changed={e => this.inputChangedHandler(e, formElement.id)}
           />
-        )}
-        <Button 
-          btnType='Success'
-          disabled={!this.state.formIsValid}
-        >
+        ))}
+        <Button btnType="Success" disabled={!this.state.formIsValid}>
           ORDER
         </Button>
       </form>
-    ); 
+    );
 
     if (this.props.loading) {
       form = <Spinner />;
@@ -236,14 +247,16 @@ const mapStateToProps = state => {
   return {
     ings: state.burgerBuilder.ingredients,
     price: state.burgerBuilder.totalPrice,
-    loading: state.order.loading,
-  }
-}
+    loading: state.order.loading
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
-    onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData)),
+    onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData))
   };
-}
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withErrorHandler(ContactData, axios)
+);
