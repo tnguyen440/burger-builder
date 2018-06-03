@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CheckoutSummary from '../../components/Order/CheckoutSummary';
 import ContactData from './ContactData';
+import * as actions from '../../store/actions/index';
 
 class Checkout extends Component {
   // componentWillMount() {
@@ -20,36 +21,55 @@ class Checkout extends Component {
   //   this.setState({ ingredients: ingredients, totalPrice: price });
   // }
 
+  // componentWillMount() {
+  //   this.props.purchaseInit();
+  // }
+
   checkoutCancellHandler = () => {
     this.props.history.goBack();
-  }
+  };
 
   checkoutCountinueHandler = () => {
     this.props.history.replace('/checkout/contact-data');
-  }
+  };
 
   render() {
-    return (
-      <div>
-        <CheckoutSummary 
-          ingredients={this.props.ings}
-          checkoutContinued={this.checkoutCountinueHandler}
-          checkouCancelled={this.checkoutCancellHandler}
-        />
-        <Route 
-          path={this.props.match.url + '/contact-data'}
-          component={ContactData}
-        />
-      </div>
-    );
+    let summary = <Redirect to="/" />;
+
+    if (this.props.ings) {
+      const purchasedRedirect = this.props.purchased ?  <Redirect to="/" /> : null;
+      summary = 
+        <div>
+          {purchasedRedirect}
+          <CheckoutSummary
+            ingredients={this.props.ings}
+            checkoutContinued={this.checkoutCountinueHandler}
+            checkouCancelled={this.checkoutCancellHandler}
+          />
+          <Route
+            path={this.props.match.url + '/contact-data'}
+            component={ContactData}
+          />
+        </div>
+      ;
+    }
+
+    return summary;
   }
 }
 
 const mapStateToProps = state => {
   return {
-    ings: state.ingredients,
-    price: state.totalPrice
-  }
+    ings: state.burgerBuilder.ingredients,
+    price: state.burgerBuilder.totalPrice,
+    purchased: state.order.purchased,
+  };
 };
+
+// const mapDispatchTopProps = dispatch => {
+//   return {
+//     onInitPurchase: () => dispatch(actions.purchaseInit()),
+//   }
+// }
 
 export default connect(mapStateToProps)(Checkout);
