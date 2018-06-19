@@ -59,6 +59,4 @@ const Input = (props) => {
   );
 };
 
-//test ssh
-
 export default Input;
