@@ -5,9 +5,9 @@ import Button from '../Button/Button';
 
 class OrderSummary extends Component {
   // this could be a functional component, doesn'tgit status have to be a class
-  componentWillUpdate() {
-    console.log('[OrderSummary] componentWillUpdate');
-  }
+  // componentWillUpdate() {
+  //   console.log('[OrderSummary] componentWillUpdate');
+  // }
 
   render() {
     const ingredientSummary = Object.keys(this.props.ingredients)
