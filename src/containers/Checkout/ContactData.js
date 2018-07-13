@@ -8,6 +8,7 @@ import Spinner from '../../components/UI/Spinner';
 import Input from '../../components/UI/Input';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
+import { updateObject } from '../../shared/utils';
 
 class ContactData extends Component {
   state = {
@@ -170,26 +171,39 @@ class ContactData extends Component {
 
   inputChangedHandler = (event, inputIdentifier) => {
     // console.log(event.target.value);
-    const updatedOrderForm = {
-      ...this.state.orderForm
-    };
+    // const updatedOrderForm = {
+    //   ...this.state.orderForm
+    // };
 
     // console.log('updatedOrderForm', updatedOrderForm);
 
-    const updatedOrderFormElement = {
-      ...updatedOrderForm[inputIdentifier]
-    };
+    // const updatedOrderFormElement = {
+    //   ...updatedOrderForm[inputIdentifier]
+    // };
+    const updatedOrderFormElement = updateObject(this.state.orderForm[inputIdentifier], {
+      value: event.target.value,
+      valid: this.checkValidity(
+        event.target.value,
+        this.state.orderForm[inputIdentifier].validation
+      ),
+      touched: true,
+    });
 
     // console.log('updatedOrderFormElement', updatedOrderFormElement);
 
-    updatedOrderFormElement.value = event.target.value;
-    updatedOrderFormElement.valid = this.checkValidity(
-      updatedOrderFormElement.value,
-      updatedOrderFormElement.validation
-    );
-    updatedOrderFormElement.touched = true;
+    // updatedOrderFormElement.value = event.target.value;
+    // updatedOrderFormElement.valid = this.checkValidity(
+    //   updatedOrderFormElement.value,
+    //   updatedOrderFormElement.validation
+    // );
+    // updatedOrderFormElement.touched = true;
     // console.log(updatedOrderFormElement);
-    updatedOrderForm[inputIdentifier] = updatedOrderFormElement;
+
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [inputIdentifier]: updatedOrderFormElement
+    });
+
+    // updatedOrderForm[inputIdentifier] = updatedOrderFormElement;
 
     let formIsValid = true;
 
